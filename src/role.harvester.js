@@ -1,4 +1,4 @@
-const _filter = require('lodash').filter;
+const { filter: _filter, reduce: _reduce } = require('lodash');
 
 Memory.sources || (Memory.sources = {});
 
@@ -23,6 +23,12 @@ function hasWorkableSpots(source) {
 
     sourceMem(source, 'maxWorkableSpots', terrain.length);
     sourceMem(source, 'workableSpots', terrain.length);
+  }
+  else if(sourceMem(source, 'recalc')) {
+    // count creeps that have reserved this source
+    let reservedSpots = _reduce(Memory.creeps, (count, _, creep) => ( count + (creep.reservedSource === source.id )), 0);
+    sourceMem(source, 'workableSpots', reservedSpots);
+    sourceMem(source, 'recalc', false);
   }
 
   return sourceMem(source, 'workableSpots') > 0;
@@ -73,6 +79,7 @@ const { harvestResource, checkinSpot } = require('utils'),
                                                  { filter: (source) => source.energy > 0 && hasWorkableSpots(source) });
           }
 
+          // reserve source if it's not already reserved
           if(creep.memory.reservedSource != source.id && sourceMem(source, 'workableSpots') > 0) {
             sourceMem(source, 'workableSpots', sourceMem(source, 'workableSpots') - 1);
             creep.memory.reservedSource = source.id;

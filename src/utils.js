@@ -45,6 +45,17 @@ var utils = {
       default:
         return [MOVE,MOVE,CARRY,WORK,WORK];
     }
+  },
+
+  cleanupMemory: function(creepName) {
+    const oldMem = Memory.creeps[creepName];
+
+    if(oldMem.role === 'harvester') {
+      Memory.sources[oldMem.reservedSource].recalc = true;
+    }
+
+    delete Memory.creeps[creepName];
+    console.log('Clearing non-existing creep memory:', creepName);
   }
 }
 
