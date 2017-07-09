@@ -21,7 +21,7 @@ const { collectResource } = require('utils'),
             role.doUpgrade(creep);
           }
           else {
-            utils.collectResource(creep);
+            collectResource(creep);
           }
         },
 

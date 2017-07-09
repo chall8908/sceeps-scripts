@@ -74,9 +74,6 @@ const { harvestResource, checkinSpot } = require('utils'),
           }
 
           if(creep.memory.reservedSource != source.id && sourceMem(source, 'workableSpots') > 0) {
-            if(creep.memory.reservedSource) {
-              utils.checkinSpot(creep); // just in case
-            }
             sourceMem(source, 'workableSpots', sourceMem(source, 'workableSpots') - 1);
             creep.memory.reservedSource = source.id;
           }
