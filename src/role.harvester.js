@@ -1,3 +1,33 @@
+const _filter = require('lodash').filter;
+
+Memory.sources || (Memory.sources = {});
+
+function sourceMem(source, key, value) {
+  Memory.sources[source.id] || (Memory.sources[source.id] = {});
+  if(key) {
+    if(value) {
+      Memory.sources[source.id][key] = value;
+    }
+
+    return Memory.sources[source.id][key];
+  }
+
+  return Memory.sources[source.id];
+}
+
+function hasWorkableSpots(source) {
+  if(!sourceMem(source, 'maxWorkableSpots')) {
+    // determine number of workable spots
+    var terrain = source.room.lookForAtArea(LOOK_TERRAIN, source.pos.y - 1, source.pos.x - 1, source.pos.y + 1, source.pos.x + 1, true);
+    terrain = _filter(terrain, function(t) { return t.terrain != 'wall' });
+
+    sourceMem(source, 'maxWorkableSpots', terrain.length);
+    sourceMem(source, 'workableSpots', terrain.length);
+  }
+
+  return sourceMem(source, 'workableSpots') > 0;
+}
+
 const { harvestResource, checkinSpot } = require('utils'),
       role = {
 
@@ -12,11 +42,9 @@ const { harvestResource, checkinSpot } = require('utils'),
           }
 
           if(creep.memory.harvesting) {
-            harvestResource(creep);
+            role.harvestResource(creep);
           }
           else {
-            checkinSpot(creep);
-
             // Find the nearest non-full container
             let target = creep.pos.findClosestByPath(FIND_STRUCTURES,
                                                      { filter: bldg => (
@@ -29,6 +57,33 @@ const { harvestResource, checkinSpot } = require('utils'),
               if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.doMove(target, {visualizePathStyle: {stroke: '#ffffff'}});
               }
+            }
+          }
+        },
+
+        // Path the creep to the nearest workable resource
+        harvestResource: function(creep) {
+          let source;
+
+          if (creep.memory.reservedSource) {
+            source = Game.getObjectById(creep.memory.reservedSource);
+          }
+          else {
+            source = creep.pos.findClosestByPath(FIND_SOURCES,
+                                                 { filter: (source) => source.energy > 0 && hasWorkableSpots(source) });
+          }
+
+          if(creep.memory.reservedSource != source.id && sourceMem(source, 'workableSpots') > 0) {
+            if(creep.memory.reservedSource) {
+              utils.checkinSpot(creep); // just in case
+            }
+            sourceMem(source, 'workableSpots', sourceMem(source, 'workableSpots') - 1);
+            creep.memory.reservedSource = source.id;
+          }
+
+          if(source) {
+            if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
+              creep.doMove(source, {visualizePathStyle: {stroke: '#00aaff'}});
             }
           }
         }
