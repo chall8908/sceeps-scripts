@@ -1,12 +1,12 @@
 const utils = require('utils'),
       TowerUtils = require('towers'),
       roles = {
-        harvester: require('harvester'),
-        hauler   : require('hauler'),
-        upgrader : require('upgrader'),
-        builder  : require('builder'),
-        repairer : require('repairer'),
-        soldier  : require('soldier')
+        harvester: require('role.harvester'),
+        hauler   : require('role.hauler'),
+        upgrader : require('role.upgrader'),
+        builder  : require('role.builder'),
+        repairer : require('role.repairer'),
+        soldier  : require('role.soldier')
       },
       wantedRoles = {
         'harvester': 6,
