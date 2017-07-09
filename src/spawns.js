@@ -1,20 +1,12 @@
-import harvester from './role.harvester'
-import hauler    from './role.hauler'
-import upgrader  from './role.upgrader'
-import builder   from './role.builder'
-import repairer  from './role.repairer'
-import soldier   from './role.soldier'
-
-import utils from './utils';
-import TowerUtils from './towers';
-
-const roles = {
-        harvester,
-        hauler,
-        upgrader,
-        builder,
-        repairer,
-        soldier
+const utils = require('utils'),
+      TowerUtils = require('towers'),
+      roles = {
+        harvester: require('harvester'),
+        hauler   : require('hauler'),
+        upgrader : require('upgrader'),
+        builder  : require('builder'),
+        repairer : require('repairer'),
+        soldier  : require('soldier')
       },
       wantedRoles = {
         'harvester': 6,
@@ -99,4 +91,4 @@ const roles = {
         }
       };
 
-export default building;
+module.exports = building;

@@ -1,7 +1,8 @@
-import './creep.overrides'; // Prototype modifications etc.
+require('creep.overrides'); // Prototype modifications etc.
 
 // const SpawnUtils = require('spawns');
-import { processRoom } from './spawns';
+const { processRoom } = require('spawns');
+
 
 // Check for dead creeps every 25 ticks
 if(!Memory.checkCounter && Memory.checkCounter !== 0) {

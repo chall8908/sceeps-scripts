@@ -1,6 +1,5 @@
-import { collectResource } from './utils';
-
-const STORAGE_STRUCTURES = [STRUCTURE_SPAWN, STRUCTURE_EXTENSION],
+const { collectResource } = require('utils'),
+      STORAGE_STRUCTURES = [STRUCTURE_SPAWN, STRUCTURE_EXTENSION],
       role = {
         run: function(creep) {
 
@@ -40,4 +39,4 @@ const STORAGE_STRUCTURES = [STRUCTURE_SPAWN, STRUCTURE_EXTENSION],
         }
       };
 
-export default role;
+module.exports = role;

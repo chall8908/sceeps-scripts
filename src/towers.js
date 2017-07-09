@@ -30,4 +30,4 @@ const getMostHurt = (things) => things.reduce((mostHurt, t) => mostHurt.hits > t
         }
       };
 
-export default building;
+module.exports = building;

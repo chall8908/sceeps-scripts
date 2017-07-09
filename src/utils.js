@@ -1,4 +1,4 @@
-import { filter as _filter } from 'lodash';
+const _filter = require('lodash').filter;
 
 Memory.sources || (Memory.sources = {});
 
@@ -111,4 +111,4 @@ var utils = {
   }
 }
 
-export default utils;
+module.exports = utils;
