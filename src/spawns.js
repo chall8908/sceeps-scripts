@@ -10,7 +10,7 @@ const utils = require('utils'),
       },
       wantedRoles = {
         'harvester': 6,
-        'hauler'   : 3,
+        'hauler'   : 4,
         'upgrader' : 2,
         'builder'  : 3,
         'repairer' : 0,
