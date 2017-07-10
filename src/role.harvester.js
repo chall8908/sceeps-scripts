@@ -80,7 +80,7 @@ const { harvestResource, checkinSpot } = require('utils'),
           }
 
           // reserve source if it's not already reserved
-          if(creep.memory.reservedSource != source.id) {
+          if(source && creep.memory.reservedSource != source.id) {
             let workableSpots = sourceMem(source, 'workableSpots');
             if(workableSpots > 0) {
               sourceMem(source, 'workableSpots', workableSpots - 1);
