@@ -26,8 +26,9 @@ function hasWorkableSpots(source) {
   }
   else if(sourceMem(source, 'recalc')) {
     // count creeps that have reserved this source
-    let reservedSpots = _reduce(Memory.creeps, (count, _, creep) => ( count + (creep.reservedSource === source.id )), 0);
-    sourceMem(source, 'workableSpots', reservedSpots);
+    let reservedSpots = _reduce(Memory.creeps, (count, _, creep) => ( count + (creep.reservedSource === source.id )), 0),
+        totalSpots = sourceMem(source, 'maxWorkableSpots');
+    sourceMem(source, 'workableSpots', totalSpots - reservedSpots);
     sourceMem(source, 'recalc', false);
   }
 
