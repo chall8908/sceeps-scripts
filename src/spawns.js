@@ -54,6 +54,7 @@ const utils = require('utils'),
                   spawn.createCreep(utils.getBodyForRole(role), role + creepNum, { role: role });
 
                   spawn.memory.creepCounter = creepNum > 20 ? 1 : creepNum + 1;
+                  break;
                 } else {
                   unableToBuild = true;
                   // Stop trying to build creeps if we're short harvesters or haulers
