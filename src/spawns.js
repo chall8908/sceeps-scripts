@@ -17,6 +17,11 @@ const utils = require('utils'),
         'soldier'  : 1
       },
       roleOrder  = ['harvester', 'hauler', 'builder', 'upgrader', 'repairer', 'soldier'],
+      nextCreepCount = function(spawn) {
+        let creepNum = (spawn.memory.creepCounter || 0) + 1;
+        spawn.memory.creepCounter = creepNum > 20 ? 1 : creepNum;
+        return creepNum;
+      },
       building = {
         main: Game.spawns['Aurelia'],
 
@@ -57,30 +62,16 @@ const utils = require('utils'),
 
           let unableToBuild = false;
           if(!spawn.spawning) {
-            for(let role of roleOrder) {
-              if(numRoles[role] < wantedRoles[role]) {
-                if(spawn.canCreateCreep(utils.getBodyForRole(role)) == OK) {
-                  let creepNum = spawn.memory.creepCounter || 0;
-                  spawn.createCreep(utils.getBodyForRole(role), role + creepNum, { role: role });
+            let spawnFunc = spawn.room.memory.panic ? building.panic : building.spawnCreeps;
 
-                  spawn.memory.creepCounter = creepNum > 20 ? 1 : creepNum + 1;
-                  break;
-                } else {
-                  unableToBuild = true;
-                  // Stop trying to build creeps if we're short harvesters or haulers
-                  if(role === 'harvester' || role === 'hauler') {
-                    break;
-                  }
-                }
-              }
-            }
+            unableToBuild = !spawnFunc(spawn, numRoles);
           }
 
-          // Panic mode
-          // If no harvesters or haulers and spawn is full
-          /* if(unableToBuild && spawn.energy === spawn.energyCapacity) {
-           *   
-           * }*/
+          // Activate panic mode if we have no harvesters or haulers
+          // and spawn is unable to build our regular creeps
+          if(unableToBuild && !numRoles.harvesters && !numRoles.haulers) {
+            spawn.room.memory.panic = true;
+          }
 
           let spawnMessage;
 
@@ -99,6 +90,57 @@ const utils = require('utils'),
                                    spawn.pos.x + 1, spawn.pos.y,
                                    { font: 0.5, stroke: '#000000', align: 'left', opacity: 0.7 });
           }
+        },
+
+        // Do regular creep spaning
+        spawnCreeps: function(spawn, numRoles) {
+          for(let role of roleOrder) {
+            if(numRoles[role] < wantedRoles[role]) {
+              let body = utils.getBodyForRole(role);
+
+              if(spawn.canCreateCreep(body) == OK) {
+                let creepNum = nextCreepCount(spawn);
+                spawn.createCreep(body, role + creepNum, { role });
+                return true;
+              }
+              else {
+                // Stop trying to build creeps if we're short harvesters or haulers
+                if(role === 'harvester' || role === 'hauler') {
+                  break;
+                }
+              }
+            }
+          }
+
+          return false;
+        }
+
+        // Perform panic mode spawning
+        panic: function(spawn, numRoles) {
+          const body = [MOVE,CARRY,WORK];
+
+          let creepNum;
+
+          if(numRoles.harvesters < 2) {
+            if(spawn.canCreateCreep(body) === OK) {
+              creepNum = nextCreepCount(spawn);
+              spawn.createCreep(body, `panic harvester ${creepNum}`, { role: 'harvester' });
+              return true;
+            }
+          }
+          else if(numRoles.upgraders < 1) {
+            if(spawn.canCreateCreep(body) === OK) {
+              creepNum = nextCreepCount(spawn);
+              spawn.createCreep(body, `panic upgrader ${creepNum}`, { role: 'upgrader' });
+              return true;
+            }
+          }
+          else {
+            spawn.room.memory.panic = false;
+            return building.spawnCreeps(spawn);
+          }
+
+          return false;
         }
       };
 
