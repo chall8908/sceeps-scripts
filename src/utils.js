@@ -11,25 +11,23 @@ var utils = {
       }
     }
 
-    target = creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: bldg => bldg.structureType === STRUCTURE_CONTAINER && bldg.store[RESOURCE_ENERGY] > 0 });
-    if(target) {
-      switch(creep.withdraw(target, RESOURCE_ENERGY)) {
-        case ERR_NOT_IN_RANGE:
-          creep.doMove(target, {visualizePathStyle: {stroke: '#00aaff'}})
-        case OK:
-          return;
-      }
+    // look for full containers
+    target = creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: bldg => bldg.structureType === STRUCTURE_CONTAINER && bldg.store[RESOURCE_ENERGY] === bldg.storageCapacity});
+
+    // look for any non-empty containers
+    if(!target) {
+      target = creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: bldg => bldg.structureType === STRUCTURE_CONTAINER && bldg.store[RESOURCE_ENERGY] > 0 });
     }
 
-    if(creep.memory.role === 'upgrader') {
+    // upgraders can also pull from extensions.
+    // this ensures that upgrades continue
+    if(!target && creep.memory.role === 'upgrader') {
       target = creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: bldg => bldg.structureType === STRUCTURE_EXTENSION && bldg.energy > 0 });
-      if(target) {
-        switch(creep.withdraw(target, RESOURCE_ENERGY)) {
-          case ERR_NOT_IN_RANGE:
-            creep.doMove(target, {visualizePathStyle: {stroke: '#00aaff'}});
-          case OK:
-            return;
-        }
+    }
+
+    if(target) {
+      if(creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        creep.doMove(target, {visualizePathStyle: {stroke: '#00aaff'}});
       }
     }
   },
