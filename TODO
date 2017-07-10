@@ -1,0 +1,15 @@
+Need to do:
+==========
+
+[] prospector role
+* prospectors find nearby workable sources to mine
+
+[] panic mode
+* builds a cheap prospector with the "panic" flag
+** the panic flag tells the prospector to ignore containers when returning energy
+
+Potential optimizations:
+=======================
+* Better hauling logic
+** Haulers pick containers to pick up from and only pick from that one until empty?
+** Do reservations like with sources?
