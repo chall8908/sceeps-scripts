@@ -34,9 +34,19 @@ const utils = require('utils'),
           for(let creep of spawn.room.find(FIND_MY_CREEPS)) {
             let role = roles[creep.memory.role];
 
-            numRoles[creep.memory.role]++;
-            
-            role && role.run(creep);
+            if (role) {
+              numRoles[creep.memory.role]++;
+
+              try {
+                role.run(creep);
+              }
+              catch(e) {
+                console.error(e);
+                if(e.toSource) {
+                  console.error(e.toSource());
+                }
+              }
+            }
           }
 
           let towers = spawn.room.find(FIND_MY_STRUCTURES, { filter: (bldg) => bldg.structureType === STRUCTURE_TOWER });
