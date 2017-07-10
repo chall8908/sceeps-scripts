@@ -113,7 +113,7 @@ const utils = require('utils'),
           }
 
           return false;
-        }
+        },
 
         // Perform panic mode spawning
         panic: function(spawn, numRoles) {
