@@ -41,9 +41,9 @@ const utils = require('utils'),
                 role.run(creep);
               }
               catch(e) {
-                console.error(e);
+                console.log(e);
                 if(e.toSource) {
-                  console.error(e.toSource());
+                  console.log(e.toSource());
                 }
               }
             }
