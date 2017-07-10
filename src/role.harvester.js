@@ -1,6 +1,7 @@
 const { harvestResource, checkinSpot } = require('utils'),
       roleHauler = require('role.hauler'),
-      { filter: _filter, reduce: _reduce } = require('lodash');
+      { filter: _filter, reduce: _reduce } = require('lodash'),
+      STORAGE_STRUCTURES = [STRUCTURE_SPAWN, STRUCTURE_EXTENSION];
 
 Memory.sources || (Memory.sources = {});
 
