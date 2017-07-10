@@ -69,7 +69,7 @@ const utils = require('utils'),
 
           // Activate panic mode if we have no harvesters or haulers
           // and spawn is unable to build our regular creeps
-          if(unableToBuild && !numRoles.harvesters && !numRoles.haulers) {
+          if(unableToBuild && !numRoles.harvester && !numRoles.hauler) {
             spawn.room.memory.panic = true;
           }
 
