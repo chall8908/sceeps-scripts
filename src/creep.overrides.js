@@ -1,7 +1,7 @@
 Creep.prototype.doMove = function (target, options) {
-    let opts = options || {};
+  let opts = options || {};
 
-    opts.reusePath = 2;
-
-    this.moveTo(target, options);
+  opts.reusePath = 0;
+  
+  this.moveTo(target, options);
 };
