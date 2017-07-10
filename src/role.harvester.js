@@ -54,7 +54,7 @@ const role = {
           }
           else {
             let target;
-            if (creep.pos.room.memory.panic) {
+            if (creep.room.memory.panic) {
               target = creep.pos.findClosestByPath(FIND_STRUCTURES,
                                                    { filter: bldg => (
                                                      STORAGE_STRUCTURES.some(type => type === bldg.structureType) &&
