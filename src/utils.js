@@ -50,7 +50,7 @@ var utils = {
   cleanupMemory: function(creepName) {
     const oldMem = Memory.creeps[creepName];
 
-    if(oldMem.role === 'harvester') {
+    if(oldMem.role === 'harvester' && oldMem.reservedSource) {
       Memory.sources[oldMem.reservedSource].recalc = true;
     }
 
