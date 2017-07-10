@@ -1,4 +1,6 @@
-const { filter: _filter, reduce: _reduce } = require('lodash');
+const { harvestResource, checkinSpot } = require('utils'),
+      roleHauler = require('role.hauler'),
+      { filter: _filter, reduce: _reduce } = require('lodash');
 
 Memory.sources || (Memory.sources = {});
 
@@ -35,8 +37,7 @@ function hasWorkableSpots(source) {
   return sourceMem(source, 'workableSpots') > 0;
 }
 
-const { harvestResource, checkinSpot } = require('utils'),
-      role = {
+const role = {
 
         /** @param {Creep} creep **/
         run: function(creep) {
@@ -50,6 +51,9 @@ const { harvestResource, checkinSpot } = require('utils'),
 
           if(creep.memory.harvesting) {
             role.harvestResource(creep);
+          }
+          else if(creep.memory.panic) {
+            roleHauler.run(creep);
           }
           else {
             // Find the nearest non-full container
