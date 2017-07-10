@@ -52,17 +52,33 @@ const role = {
           if(creep.memory.harvesting) {
             role.harvestResource(creep);
           }
-          else if(creep.memory.panic) {
-            roleHauler.run(creep);
-          }
           else {
-            // Find the nearest non-full container
-            let target = creep.pos.findClosestByPath(FIND_STRUCTURES,
-                                                     { filter: bldg => (
-                                                       bldg.structureType === STRUCTURE_CONTAINER &&
-                                                       bldg.store[RESOURCE_ENERGY] < bldg.storeCapacity
-                                                     )
-                                                     });
+            let target;
+            if (creep.pos.room.memory.panic) {
+              target = creep.pos.findClosestByPath(FIND_STRUCTURES,
+                                                   { filter: bldg => (
+                                                     STORAGE_STRUCTURES.some(type => type === bldg.structureType) &&
+                                                     bldg.energy < bldg.energyCapacity
+                                                   )
+                                                   });
+
+              if(!target) {
+                target = creep.pos.findClosestByPath(FIND_STRUCTURES,
+                                                     { filter: (bldg) => (
+                                                       bldg.structureType === STRUCTURE_TOWER && bldg.energy < bldg.energyCapacity
+                                                     )})
+              }
+            }
+
+            if(!target) {
+              // Find the nearest non-full container
+              target = creep.pos.findClosestByPath(FIND_STRUCTURES,
+                                                   { filter: bldg => (
+                                                     bldg.structureType === STRUCTURE_CONTAINER &&
+                                                     bldg.store[RESOURCE_ENERGY] < bldg.storeCapacity
+                                                   )
+                                                   });
+            }
 
             if(target) {
               if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
