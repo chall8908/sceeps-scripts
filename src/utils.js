@@ -37,7 +37,7 @@ var utils = {
       case 'soldier':
         return [MOVE,MOVE,MOVE,ATTACK,ATTACK];
       case 'hauler':
-        return [MOVE,MOVE,MOVE,CARRY,CARRY];
+        return [MOVE,MOVE,MOVE,CARRY,CARRY,CARRY];
       case 'harvester':
         return [MOVE,CARRY,WORK,WORK,WORK];
       default:
