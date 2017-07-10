@@ -4,8 +4,8 @@ Memory.sources || (Memory.sources = {});
 
 function sourceMem(source, key, value) {
   Memory.sources[source.id] || (Memory.sources[source.id] = {});
-  if(key) {
-    if(value) {
+  if(key !== undefined) {
+    if(value !== undefined) {
       Memory.sources[source.id][key] = value;
     }
 
