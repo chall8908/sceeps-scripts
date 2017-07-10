@@ -137,7 +137,7 @@ const utils = require('utils'),
           }
           else {
             spawn.room.memory.panic = false;
-            return building.spawnCreeps(spawn);
+            return building.spawnCreeps(spawn, numRoles);
           }
 
           return false;
