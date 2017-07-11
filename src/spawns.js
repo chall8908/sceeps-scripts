@@ -135,6 +135,13 @@ const utils = require('utils'),
               return true;
             }
           }
+          else if(numRoles.hauler < 1) {
+            if(spawn.canCreateCreep(body) === OK) {
+              creepNum = nextCreepCount(spawn);
+              spawn.createCreep(body, `panic hauler ${creepNum}`, { role: 'hauler' });
+              return true;
+            }
+          }
           else {
             spawn.room.memory.panic = false;
             return building.spawnCreeps(spawn, numRoles);
