@@ -121,14 +121,14 @@ const utils = require('utils'),
 
           let creepNum;
 
-          if(numRoles.harvesters < 2) {
+          if(numRoles.harvester < 2) {
             if(spawn.canCreateCreep(body) === OK) {
               creepNum = nextCreepCount(spawn);
               spawn.createCreep(body, `panic harvester ${creepNum}`, { role: 'harvester' });
               return true;
             }
           }
-          else if(numRoles.upgraders < 1) {
+          else if(numRoles.upgrader < 1) {
             if(spawn.canCreateCreep(body) === OK) {
               creepNum = nextCreepCount(spawn);
               spawn.createCreep(body, `panic upgrader ${creepNum}`, { role: 'upgrader' });
