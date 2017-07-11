@@ -35,7 +35,7 @@ var utils = {
   getBodyForRole: function(role) {
     switch(role) {
       case 'soldier':
-        return [MOVE,MOVE,MOVE,ATTACK,ATTACK];
+        return [MOVE,MOVE,TOUGH,ATTACK,ATTACK];
       case 'hauler':
         return [MOVE,MOVE,MOVE,CARRY,CARRY,CARRY];
       case 'harvester':
